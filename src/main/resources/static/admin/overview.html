@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>概览</title>
+    <link rel="stylesheet" href="../libs/layui/css/layui.css">
+    <link rel="stylesheet" href="../css/overview.css">
+
+</head>
+<body class="layui-layout-body" style="background-color: #f2f2f2">
+
+<div class="layui-card admin-header">
+    <div class="layui-breadcrumb" lay-fiter="breadcrumb" style="visibility: visible;margin-left: 20px">
+        <a href="#">主页</a>
+        <span lay-separator="-"></span>
+        <a href="#">概览</a>
+    </div>
+</div>
+<!--头部信息显示卡片-->
+<div class="layui-row layui-col-space15" style="margin-top: 10px;margin-left: 20px;margin-right: 20px">
+
+
+    <div class="layui-col-sm6 layui-col-md3">
+        <div class="layui-card">
+            <div class="layui-card-header">
+                订单量
+                <span class="layui-badge layui-bg-blue layuiadmin-badge">天</span>
+            </div>
+            <div class="layui-card-body layuiadmin-card-list">
+                <p class="layuiadmin-big-font" id="orderNum">0</p>
+
+            </div>
+        </div>
+    </div>
+    <div class="layui-col-sm6 layui-col-md3">
+        <div class="layui-card">
+            <div class="layui-card-header">
+                订单量
+                <span class="layui-badge layui-bg-blue layuiadmin-badge">天</span>
+            </div>
+            <div class="layui-card-body layuiadmin-card-list">
+                <p class="layuiadmin-big-font" >0</p>
+
+            </div>
+        </div>
+    </div>
+    <div class="layui-col-sm6 layui-col-md3">
+        <div class="layui-card">
+            <div class="layui-card-header">
+                订单量
+                <span class="layui-badge layui-bg-blue layuiadmin-badge">天</span>
+            </div>
+            <div class="layui-card-body layuiadmin-card-list">
+                <p class="layuiadmin-big-font" >0</p>
+
+            </div>
+        </div>
+    </div>
+    <div class="layui-col-sm6 layui-col-md3">
+        <div class="layui-card">
+            <div class="layui-card-header">
+                订单量
+                <span class="layui-badge layui-bg-blue layuiadmin-badge">天</span>
+            </div>
+            <div class="layui-card-body layuiadmin-card-list">
+                <p class="layuiadmin-big-font" >0</p>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="layui-row layui-col-space15">
+    <!--数据可视化部分-->
+    <div  class="layui-card layui-col-lg7 layuiadmin-datashow">
+        <div class="layui-card-header">数据可视化</div>
+        <div class="layui-card-body" style="height: 500px">
+            <div id="main01" style="height: 500px;background-color: red" ></div>
+        </div>
+    </div>
+    <div  class="layui-card layui-col-lg5 layuiadmin-datashow">
+        <div class="layui-card-header">数据可视化</div>
+        <div class="layui-card-body" style="height: 500px">
+            <div id="main" style="height: 500px; background-color: rebeccapurple"></div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script src="../libs/layui/layui.js"></script>
+<script src="../libs/echarts/echarts.min.js"></script>
+<script src="../libs/jquery/jquery.js"></script>
+<script src="../js/common.js"></script>
+
+<script>
+    layui.use('element', function(){
+        var element = layui.element;
+        $.ajax({
+            type:'get',
+            url:base_url+'/overview/getData',
+            success:function (d) {
+                $('#orderNum').text(d.orderNum);
+                $('#userNum').text(d.newUserNum);
+                $('#serviceNum').text(d.serviceNum);
+            }
+        })
+    });
+</script>
+
+<script>
+    var myChart = echarts.init(document.getElementById('main'));
+    //初始化option
+    option = {
+        tooltip : {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'cross',
+                label: {
+                    backgroundColor: '#6a7985'
+                }
+            }
+        },
+        legend: {
+            data:['酒店订单','新增用户','食品订单']
+        },
+        toolbox: {
+            feature: {
+                saveAsImage: {}
+            }
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis : [
+            {
+                type : 'category',
+                boundaryGap : false,
+                data : []
+            }
+        ],
+        yAxis : [
+            {
+                type : 'value'
+            }
+        ],
+        series : [
+            {
+                name:'酒店订单',
+                type:'line',
+                stack: '总量',
+                areaStyle: {},
+                data:[]
+            },
+            {
+                name:'新增用户',
+                type:'line',
+                stack: '总量',
+                areaStyle: {},
+                data:[]
+            },
+            {
+                name:'服务订单',
+                type:'line',
+                stack: '总量',
+                areaStyle: {},
+                data:[]
+            }
+        ]
+    };
+    getChart();
+    function getChart() {
+        var statisticsData = [];   //这是我自己建的空数组，为了把异步拿到的数据push进去
+        myChart.showLoading();  //加载数据前的loading动画
+        $.ajax({
+            url: base_url+"/overview/getChartsData",    //请求的接口名
+            type: 'GET',
+            async: true,
+            success: function (data) {
+                myChart.hideLoading();  //加载数据完成后的loading动画
+                var day=[];
+                var order=[];
+                var user=[];
+                var service=[];
+                for (var i in data) {
+                    console.log(i);
+                    console.log(data[i].data);
+                    day.push(data[i].day);
+                    order.push(data[i].orderNum);
+                    user.push(data[i].newUserNum);
+                    service.push(data[i].serviceNum);
+                }
+                myChart.setOption({
+                    xAxis: {
+                        data: day
+                    },
+                    series: [{
+                        name: '酒店订单',
+                        data: order    //这里是异步加载系列列表
+                    },{
+                        name:'新增用户',
+                        data:user
+                    },{
+                        name:'服务订单',
+                        data:service
+                    }]
+                })
+            },
+            error: function () {
+                console.log('失败')
+            }
+        })
+    }
+    myChart.setOption(option);
+</script>
+
+</body>
+</html>
