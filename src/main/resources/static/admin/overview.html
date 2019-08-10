@@ -23,7 +23,7 @@
     <div class="layui-col-sm6 layui-col-md3">
         <div class="layui-card">
             <div class="layui-card-header">
-                订单量
+                通知阅读量
                 <span class="layui-badge layui-bg-blue layuiadmin-badge">天</span>
             </div>
             <div class="layui-card-body layuiadmin-card-list">
@@ -35,7 +35,7 @@
     <div class="layui-col-sm6 layui-col-md3">
         <div class="layui-card">
             <div class="layui-card-header">
-                订单量
+                新增失物品招领
                 <span class="layui-badge layui-bg-blue layuiadmin-badge">天</span>
             </div>
             <div class="layui-card-body layuiadmin-card-list">
@@ -47,7 +47,7 @@
     <div class="layui-col-sm6 layui-col-md3">
         <div class="layui-card">
             <div class="layui-card-header">
-                订单量
+                新增留言
                 <span class="layui-badge layui-bg-blue layuiadmin-badge">天</span>
             </div>
             <div class="layui-card-body layuiadmin-card-list">
@@ -59,7 +59,7 @@
     <div class="layui-col-sm6 layui-col-md3">
         <div class="layui-card">
             <div class="layui-card-header">
-                订单量
+                搜索量
                 <span class="layui-badge layui-bg-blue layuiadmin-badge">天</span>
             </div>
             <div class="layui-card-body layuiadmin-card-list">
@@ -75,19 +75,18 @@
     <div  class="layui-card layui-col-lg7 layuiadmin-datashow">
         <div class="layui-card-header">数据可视化</div>
         <div class="layui-card-body" style="height: 500px">
-            <div id="main01" style="height: 500px;background-color: red" ></div>
+            <div id="main" style="height: 400px" ></div>
         </div>
     </div>
     <div  class="layui-card layui-col-lg5 layuiadmin-datashow">
-        <div class="layui-card-header">数据可视化</div>
+        <div class="layui-card-header">最新留言</div>
         <div class="layui-card-body" style="height: 500px">
-            <div id="main" style="height: 500px; background-color: rebeccapurple"></div>
+            <div id="mytable" ></div>
         </div>
     </div>
 </div>
 
-
-
+</body>
 
 <script src="../libs/layui/layui.js"></script>
 <script src="../libs/echarts/echarts.min.js"></script>
@@ -95,128 +94,95 @@
 <script src="../js/common.js"></script>
 
 <script>
-    layui.use('element', function(){
+    layui.use(['element','table'], function(){
         var element = layui.element;
-        $.ajax({
-            type:'get',
-            url:base_url+'/overview/getData',
-            success:function (d) {
-                $('#orderNum').text(d.orderNum);
-                $('#userNum').text(d.newUserNum);
-                $('#serviceNum').text(d.serviceNum);
-            }
-        })
+
+        var table = layui.table;
+
+        table.render({
+            elem: '#mytable'
+            ,url:'/json/overviewTable.json'
+            ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+            ,cols: [[
+                {field:'name', width:80, title: '姓名',sort:true}
+                ,{field:'time', width:130, title: '留言时间',sort:true}
+                ,{field:'info', width:300, title: '留言内容', sort: true}
+
+            ]]
+            ,height:400
+        });
     });
 </script>
 
+<!--echarts相关脚本-->
 <script>
+
     var myChart = echarts.init(document.getElementById('main'));
-    //初始化option
-    option = {
-        tooltip : {
-            trigger: 'axis',
-            axisPointer: {
-                type: 'cross',
-                label: {
-                    backgroundColor: '#6a7985'
-                }
-            }
-        },
-        legend: {
-            data:['酒店订单','新增用户','食品订单']
-        },
-        toolbox: {
-            feature: {
-                saveAsImage: {}
-            }
-        },
-        grid: {
-            left: '3%',
-            right: '4%',
-            bottom: '3%',
-            containLabel: true
-        },
-        xAxis : [
-            {
-                type : 'category',
-                boundaryGap : false,
-                data : []
-            }
-        ],
-        yAxis : [
-            {
-                type : 'value'
-            }
-        ],
-        series : [
-            {
-                name:'酒店订单',
-                type:'line',
-                stack: '总量',
-                areaStyle: {},
-                data:[]
+
+    setTimeout(function () {
+
+        option = {
+            legend: {},
+            tooltip: {
+                trigger: 'axis',
+                showContent: false
             },
-            {
-                name:'新增用户',
-                type:'line',
-                stack: '总量',
-                areaStyle: {},
-                data:[]
+            dataset: {
+                source: [
+                    ['product', '2012', '2013', '2014', '2015', '2016', '2017'],
+                    ['通知阅读量', 41.1, 30.4, 65.1, 53.3, 83.8, 98.7],
+                    ['失物招领', 86.5, 92.1, 85.7, 83.1, 73.4, 55.1],
+                    ['留言', 24.1, 67.2, 79.5, 86.4, 65.2, 82.5],
+                    ['检索', 55.2, 67.1, 69.2, 72.4, 53.9, 39.1]
+                ]
             },
-            {
-                name:'服务订单',
-                type:'line',
-                stack: '总量',
-                areaStyle: {},
-                data:[]
-            }
-        ]
-    };
-    getChart();
-    function getChart() {
-        var statisticsData = [];   //这是我自己建的空数组，为了把异步拿到的数据push进去
-        myChart.showLoading();  //加载数据前的loading动画
-        $.ajax({
-            url: base_url+"/overview/getChartsData",    //请求的接口名
-            type: 'GET',
-            async: true,
-            success: function (data) {
-                myChart.hideLoading();  //加载数据完成后的loading动画
-                var day=[];
-                var order=[];
-                var user=[];
-                var service=[];
-                for (var i in data) {
-                    console.log(i);
-                    console.log(data[i].data);
-                    day.push(data[i].day);
-                    order.push(data[i].orderNum);
-                    user.push(data[i].newUserNum);
-                    service.push(data[i].serviceNum);
-                }
-                myChart.setOption({
-                    xAxis: {
-                        data: day
+            xAxis: {type: 'category'},
+            yAxis: {gridIndex: 0},
+            grid: {top: '55%'},
+            series: [
+                {type: 'line', smooth: true, seriesLayoutBy: 'row'},
+                {type: 'line', smooth: true, seriesLayoutBy: 'row'},
+                {type: 'line', smooth: true, seriesLayoutBy: 'row'},
+                {type: 'line', smooth: true, seriesLayoutBy: 'row'},
+                {
+                    type: 'pie',
+                    id: 'pie',
+                    radius: '30%',
+                    center: ['50%', '25%'],
+                    label: {
+                        formatter: '{b}: {@2012} ({d}%)'
                     },
-                    series: [{
-                        name: '酒店订单',
-                        data: order    //这里是异步加载系列列表
-                    },{
-                        name:'新增用户',
-                        data:user
-                    },{
-                        name:'服务订单',
-                        data:service
-                    }]
-                })
-            },
-            error: function () {
-                console.log('失败')
+                    encode: {
+                        itemName: 'product',
+                        value: '2012',
+                        tooltip: '2012'
+                    }
+                }
+            ]
+        };
+
+        myChart.on('updateAxisPointer', function (event) {
+            var xAxisInfo = event.axesInfo[0];
+            if (xAxisInfo) {
+                var dimension = xAxisInfo.value + 1;
+                myChart.setOption({
+                    series: {
+                        id: 'pie',
+                        label: {
+                            formatter: '{b}: {@[' + dimension + ']} ({d}%)'
+                        },
+                        encode: {
+                            value: dimension,
+                            tooltip: dimension
+                        }
+                    }
+                });
             }
-        })
-    }
-    myChart.setOption(option);
+        });
+
+        myChart.setOption(option);
+    })
+
 </script>
 
-</body>
 </html>
