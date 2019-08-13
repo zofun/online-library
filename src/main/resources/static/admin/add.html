@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>失物招领</title>
+    <link rel="stylesheet" href="../libs/layui/css/layui.css">
+    <link rel="stylesheet" href="../css/overview.css">
+    <link rel="stylesheet" href="../libs/editor.md/css/editormd.css">
+</head>
+<body class="layui-layout-body" style="background-color: #f2f2f2">
+
+
+<div class="layui-row">
+    <div class="layui-form layui-col-lg4 layui-col-lg-offset4">
+        <div class="layui-form-item">
+            <label for="" class="layui-form-label">姓名</label>
+            <div class="layui-input-block">
+                <input type="text" name="title" required  lay-verify="required" placeholder="请输入姓名" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="" class="layui-form-label">丢失时间</label>
+            <div class="layui-input-block">
+                <input class="layui-input"  id="time">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="" class="layui-form-label">描述信息</label>
+            <div class="layui-input-block">
+                <textarea placeholder="请输入描述信息" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <div class="layui-row">
+                    <div class="layui-col-lg2 layui-col-lg-offset5">
+                        <button class="layui-btn">提交</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+</body>
+<script src="../libs/jquery/jquery.js"></script>
+<script src="../libs/layui/layui.js"></script>
+
+<script src="../js/common.js"></script>
+<!--layui相关-->
+<script>
+    layui.use(['element','table','form','laydate'], function() {
+        var element = layui.element;
+        var form=layui.form;
+        var table=layui.table;
+        var laydate=layui.laydate;
+        laydate.render({
+            elem: '#time' //指定元素
+        });
+    });
+</script>
+
+
+
+</html>

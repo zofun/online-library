@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>内容管理</title>
+    <title>失物招领</title>
     <link rel="stylesheet" href="../libs/layui/css/layui.css">
     <link rel="stylesheet" href="../css/overview.css">
     <link rel="stylesheet" href="../libs/editor.md/css/editormd.css">
@@ -13,33 +13,17 @@
     <div class="layui-breadcrumb" lay-fiter="breadcrumb" style="visibility: visible;margin-left: 20px">
         <a href="#">主页</a>
         <span lay-separator="-"></span>
-        <a href="#">新建内容</a>
+        <a href="#">失物招领</a>
     </div>
 </div>
 
-<div class="layui-row" style="margin-top: 20px">
-    <div class="layui-col-lg3 layui-col-lg-offset1">
-        <label class="layui-inline">按标题搜索</label>
-        <div class="layui-inline">
-            <input type="text" name="title" required  lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input">
-        </div>
-    </div>
-    <div class="layui-col-lg3">
-        <label class="layui-inline">按作者搜索</label>
-        <div class="layui-inline">
-            <input type="text" name="title" required  lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input">
-        </div>
-    </div>
-    <div class="layui-col-lg3">
-        <label class="layui-inline">按时间搜索</label>
-        <div class="layui-inline">
-            <input type="text" class="layui-input" id="time">
-        </div>
-    </div>
-    <div class="layui-col-lg2">
-        <button class="layui-btn">立即搜索</button>
+<div class="layui-row layui-form" style="margin-top: 20px">
+
+    <div class="layui-col-lg2 layui-col-lg-offset2">
+        <button class="layui-btn" onclick="openAddLostProperty()">发布失物招领</button>
     </div>
 </div>
+
 
 <div class="layui-row" style="margin-top: 20px">
     <div class="layui-col-lg-6 layui-col-lg-offset2">
@@ -60,11 +44,11 @@
         var element = layui.element;
         var form=layui.form;
         var table=layui.table;
-        var laydate = layui.laydate;
-
+        var laydate=layui.laydate;
         laydate.render({
             elem: '#time' //指定元素
         });
+
 
         table.render({
             elem: '#table'
@@ -75,20 +59,31 @@
             ,page: true //开启分页
             ,cols: [[ //表头
                 {field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'}
-                ,{field: 'title', title: '标题', width:200,edit: 'text'}
-                ,{field: 'time', title: '发布时间', width:150, sort: true}
-                ,{field: 'author', title: '作者', width:80}
-                ,{field: 'classify', title: '所属栏目', width: 200}
+                ,{field: 'name', title: '用户名', width:100,edit: 'text'}
+                ,{field: 'time', title: '丢失时间', width:150, sort: true}
+                ,{field: 'info', title: '描述信息', width:300,edit: 'text'}
+                ,{field: 'status', title: '状态', width: 200}
                 ,{fixed: 'right', width:178, align:'center', toolbar: '#barDemo'}
             ]]
         });
     });
 </script>
+<!--事件处理相关脚本-->
+<script>
+    function openAddLostProperty() {
+        layer.open({
+            type:2,
+            content:base_url+"/admin/add.html",
+            area: ['600px', '400px'],
+            title:'添加失物招领'
+        })
+
+    }
+</script>
 
 <!--相关模板-->
 <script type="text/html" id="barDemo">
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
-    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">处理</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
 
