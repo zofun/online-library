@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>书籍推荐</title>
+    <link rel="stylesheet" href="../libs/layui/css/layui.css">
+    <link rel="stylesheet" href="../css/overview.css">
+    <link rel="stylesheet" href="../libs/editor.md/css/editormd.css">
+</head>
+<body class="layui-layout-body" style="background-color: #f2f2f2">
+
+<div class="layui-card admin-header">
+    <div class="layui-breadcrumb" lay-fiter="breadcrumb" style="visibility: visible;margin-left: 20px">
+        <a href="#">主页</a>
+        <span lay-separator="-"></span>
+        <a href="#">书籍推荐</a>
+    </div>
+</div>
+<div class="layui-row" style="margin-top: 20px">
+    <div class="layui-col-lg2 ">
+        <div class="layui-inline">
+            <input type="text" name="title" required  lay-verify="required" placeholder="请输入书名" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-col-lg2">
+        <div class="layui-inline">
+            <input type="text" name="title" required  lay-verify="required" placeholder="请输入作者" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-col-lg2">
+        <div class="layui-inline">
+            <input type="text" name="title" required  lay-verify="required" placeholder="请输入作者" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-col-lg2">
+        <div class="layui-inline">
+            <textarea name="desc" placeholder="请输入介绍" class="layui-textarea"></textarea>
+        </div>
+    </div>
+    <div class="layui-col-lg2">
+        <button type="button" class="layui-btn" id="test1">
+            <i class="layui-icon">&#xe67c;</i>上传图片
+        </button>
+    </div>
+    <div class="layui-col-lg2">
+        <button class="layui-btn">提交</button>
+    </div>
+</div>
+
+<!--已推荐列表-->
+<div class="layui-row" style="margin-top: 20px">
+    <div class="layui-col-lg-6 layui-col-lg-offset2">
+        <!--数据表格-->
+        <table id="table" lay-filter="test"></table>
+    </div>
+</div>
+
+
+
+</body>
+<script src="../libs/jquery/jquery.js"></script>
+<script src="../libs/layui/layui.js"></script>
+
+<script src="../js/common.js"></script>
+<!--layui相关-->
+<script>
+    layui.use(['element','table','form','laydate','upload'], function() {
+        var element = layui.element;
+        var form=layui.form;
+        var table=layui.table;
+        var laydate = layui.laydate;
+        var upload = layui.upload;
+
+        table.render({
+            elem: '#table'
+            ,toolbar:true
+            ,height: 450
+            ,width:890
+            ,url: '/json/contentTable.json' //数据接口
+            ,page: true //开启分页
+            ,cols: [[ //表头
+                {field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'}
+                ,{field: 'bookName', title: '书名', width:200,edit: 'text'}
+                ,{field: 'author', title: '作者', width:80,edit:'text',sort:true}
+                ,{field: 'classify', title: '分类', width: 180,sort: true,edit:'text'}
+                ,{field: 'info', title: '提要文摘', width:300, edit:'text'}
+            ]]
+        });
+
+        //文件上传
+        var uploadInst = upload.render({
+            elem: '#test1' //绑定元素
+            ,url: '/upload/' //上传接口
+            ,done: function(res){
+                //上传完毕回调
+            }
+            ,error: function(){
+                //请求异常回调
+            }
+        });
+
+    });
+</script>
+
+
+
+</html>
