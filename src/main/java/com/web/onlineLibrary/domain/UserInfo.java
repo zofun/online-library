@@ -1,25 +1,19 @@
 package com.web.onlineLibrary.domain;
 
-
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-
-/**
- * @author TCW
- */
 @Getter
 @Setter
+@AllArgsConstructor
 @ToString
-public class User {
+public class UserInfo {
 
-    private Integer id;
     private String username;
-    private String password;
     private String name;
-    private Integer userRole;
-    private String salt;
-
+    private String role;
+    private String roleMsg;
 
 }
