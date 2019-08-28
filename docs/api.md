@@ -15,11 +15,11 @@
 
 ## 已实现接口列表
 1. 用户注册
-2. 注册
+2. 用户登录
+3. 发布内容
 
 ## 接口
 
-----
 
 ### 注册
 #### 功能说明
@@ -75,4 +75,55 @@ password       |string        |密码
 ```
 ```json
 {"code":0,"message":"账号不存在","data":null}
+
 ```
+
+----
+
+### 发布内容
+#### 功能说明
+内容管理者编辑通知后进行发布
+#### 请求说明
+> Post <br>
+/content/add
+#### 请求参数
+字段名       |字段类型       |字段说明
+------------|-----------|-----------
+classify       |int        |分类号
+title       |string        |标题
+recommend       |string        |推荐状态 yes/no
+markdown       |string        |编辑器产生的markdown格式内容
+#### 返回结果
+```json
+{"code":200,"message":"Success","data":null}
+
+```
+```json
+{"code":500,"message":"Error","data":null}
+```
+
+----
+
+### 获取内容列表
+#### 功能说明
+获取所有的内容或，根据相关条件进行搜索
+#### 请求说明
+> Get <br>
+/content/get-content-list
+#### 请求参数
+字段名       |字段类型       |字段说明
+------------|-----------|-----------
+page       |int        |页编号
+limit       |int        |每一页数据的项数
+title       |string        |搜索条件 标题 可选参数
+author       |string        |搜索条件 作者名 可选参数
+time       |Date        |搜索条件 时间（精确到天） 可选参数
+#### 返回结果
+```json
+{"code":200,"message":"Success","data":null}
+
+```
+```json
+{"code":500,"message":"Error","data":null}
+```
+

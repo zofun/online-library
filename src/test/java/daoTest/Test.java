@@ -1,13 +1,17 @@
 package daoTest;
 
 import com.web.onlineLibrary.OnlineLibraryApplication;
+import com.web.onlineLibrary.dao.ContentMapper;
 import com.web.onlineLibrary.dao.UserMapper;
+import com.web.onlineLibrary.domain.Content;
 import com.web.onlineLibrary.domain.User;
 import lombok.AllArgsConstructor;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.io.PrintStream;
 
 /**
  * Dao单元测试
@@ -19,6 +23,8 @@ public class Test {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private ContentMapper contentMapper;
 
     @org.junit.Test
     public void userTest(){
@@ -33,5 +39,14 @@ public class Test {
         userMapper.insert(user);
 
         System.out.println(userMapper.querySaltByUsername("123"));
+    }
+
+    @org.junit.Test
+    public void contentTest(){
+        Content content=new Content();
+        content.setRecommend("yes");
+        content.setAuthor(50);
+        System.out.println(contentMapper.insert(content));
+
     }
 }
