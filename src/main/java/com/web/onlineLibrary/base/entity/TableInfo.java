@@ -12,7 +12,7 @@ import lombok.*;
 @NoArgsConstructor
 @ToString
 public class TableInfo {
-    private Integer status;
+    private Integer code;
     private String message;
     private Integer total;
     private Object[] data;
