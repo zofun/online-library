@@ -48,13 +48,13 @@
             ,toolbar:true
             ,height: 450
             ,width:890
-            ,url: '/json/contentTable.json' //数据接口
+            ,url: base_url+'/role/getList' //数据接口
             ,page: true //开启分页
             ,cols: [[ //表头
                 {field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'}
                 ,{field: 'name', title: '姓名', width:100}
                 ,{field: 'username', title: '账号', width:150, sort: true}
-                ,{field: 'role', title: '当前角色', width: 200}
+                ,{field: 'roleName', title: '当前角色', width: 200}
                 ,{fixed: 'right', width:178, align:'center', toolbar: '#btnTpl'}
             ]]
         });

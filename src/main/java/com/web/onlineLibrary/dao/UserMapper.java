@@ -22,4 +22,8 @@ public interface UserMapper {
 
     @Select("select salt from user where username=#{username}")
     String querySaltByUsername(@Param("username") String username);
+
+
+    @Select("select count(*) from user")
+    int queryUserCount();
 }

@@ -14,6 +14,6 @@ import lombok.*;
 public class TableInfo {
     private Integer code;
     private String message;
-    private Integer total;
+    private Integer count;
     private Object[] data;
 }
